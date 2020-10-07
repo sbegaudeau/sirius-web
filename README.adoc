@@ -1,0 +1,107 @@
+= sirius-web
+
+https://www.eclipse.org/sirius-web.html[Eclipse Sirius Web] is a framework to easily create and deploy studios to the web.
+We keep the principles which made the success of https://www.eclipse.org/sirius[Eclipse Sirius Desktop] and make them available on a modern cloud-based stack.
+
+This repository, `sirius-web`, contains an example application of the Sirius Web platform, built using the frontend and backend components in https://github.com/eclipse-sirius/sirius-components[`sirius-components`].
+
+== Building
+
+To build and run the example application you will need the following tools:
+
+* git
+* Java 11 (or later)
+* Apache Maven 3.6.3
+* Recent versions of Node and NPM (tested with Node v14.10 and npm 6.14.8)
+* rollup (`npm install -g rollup`)
+* yalc (`npm install -g yalc`): optional, only needed for local publication of the frontend components
+* Docker
+
+=== Building and publishing locally the frontend and backend components
+
+Build steps:
+
+1. Clone the Sirius EMF JSON repository (the `sirius-components` backend depends on it):
++
+----
+git clone https://github.com/eclipse-sirius/sirius-emf-json.git
+----
+2. Build and install (locally) the EMF JSON JARs:
++
+----
+cd sirius-emf-json
+mvn clean install -f releng/org.eclipse.sirius.emfjson.releng/pom.xml
+----
+3. Clone the `sirius-components` repository
++
+----
+git clone https://github.com/eclipse-sirius/sirius-components.git
+----
+4. Build the frontend components:
++
+----
+cd sirius-components/frontend
+npm install
+npm run build
+----
+5. Publish the built version of the frontend components locally. Still from `sirius-components/frontend`: 
++
+----
+yalc publish
+----
+6. Build the backend components:
++
+----
+cd sirius-components/backend
+mvn clean install
+----
+
+=== Building the example application
+
+1. Clone the `sirius-web` repository
++
+----
+git clone https://github.com/eclipse-sirius/sirius-web.git
+----
+2. Build the frontend:
++
+----
+cd sirius-web/frontend
+yalc add @eclipse-sirius/sirius-components
+npm install
+npm run build
+----
+3. Copy the result of the frontend build as static resources in the appropriate backend project. From the root of the repository:
++
+----
+cd sirius-web
+mkdir -p backend/sirius-web-frontend/src/main/resources/static
+cp -R frontend/build/* backend/sirius-web-frontend/src/main/resources/static
+----
+4. Build the backend:
++
+----
+cd sirius-web/backend
+mvn clean package
+----
+
+=== Running the example application
+
+1. Sirius Web uses PostgreSQL for its database. For development or local testing, the easiest way is to start a PostgreSQL instance using Docker. The `scripts` folder contains an example script to do so. From the root of the repository:
++
+----
+cd sirius-web
+./scripts/restart-siriusweb-postgresql.sh
+----
++
+_Warning:_ this may take a while the first time you run this as Docker will first pull the PostgreSQL image.
+2. Start the application:
++
+----
+java -jar backend/sirius-web-sample-application/target/sirius-web-sample-application-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --spring.datasource.url=jdbc:postgresql://localhost:5433/sirius-web-db --spring.datasource.username=dbuser --spring.datasource.password=dbpwd
+----
+3. Point your browser at http://localhost:8080 and enjoy!
+
+== License
+
+Everything in this repository is Open Source. Except when explicitly mentioned otherwise (e.g. for some resources likes images), the license is Eclipse Public License - v 2.0.
