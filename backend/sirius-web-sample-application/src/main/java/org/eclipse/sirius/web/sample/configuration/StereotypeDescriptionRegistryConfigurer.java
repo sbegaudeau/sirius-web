@@ -12,13 +12,15 @@
  *******************************************************************************/
 package org.eclipse.sirius.web.sample.configuration;
 
+import fr.obeo.dsl.designer.sample.flow.FlowFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -32,14 +34,17 @@ import org.eclipse.sirius.web.api.configuration.IStereotypeDescriptionRegistryCo
 import org.eclipse.sirius.web.api.configuration.StereotypeDescription;
 import org.eclipse.sirius.web.emf.services.SiriusWebJSONResourceFactoryImpl;
 import org.eclipse.sirius.web.emf.utils.EMFResourceUtils;
-import org.eclipse.sirius.web.services.api.monitoring.IStopWatch;
-import org.eclipse.sirius.web.services.api.monitoring.IStopWatchFactory;
+import org.obeonetwork.dsl.bpmn2.Bpmn2Factory;
+import org.obeonetwork.dsl.bpmn2.Lane;
+import org.obeonetwork.dsl.bpmn2.LaneSet;
+import org.obeonetwork.dsl.bpmn2.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import fr.obeo.dsl.designer.sample.flow.FlowFactory;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 
 /**
  * Configuration used to register new stereotype descriptions.
@@ -61,14 +66,16 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
 
     public static final String BIG_GUY_FLOW_LABEL = "Big Guy Flow (17k elements)"; //$NON-NLS-1$
 
+    private static final String TIMER_NAME = "siriusweb_stereotype_load"; //$NON-NLS-1$
+
     private static XMLParserPool parserPool = new XMLParserPoolImpl();
 
     private final Logger logger = LoggerFactory.getLogger(StereotypeDescriptionRegistryConfigurer.class);
 
-    private final IStopWatchFactory stopWatchFactory;
+    private final Timer timer;
 
-    public StereotypeDescriptionRegistryConfigurer(IStopWatchFactory stopWatchFactory) {
-        this.stopWatchFactory = Objects.requireNonNull(stopWatchFactory);
+    public StereotypeDescriptionRegistryConfigurer(MeterRegistry meterRegistry) {
+        this.timer = Timer.builder(TIMER_NAME).register(meterRegistry);
     }
 
     @Override
@@ -88,6 +95,21 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
 
     private String getBigGuyFlowContent() {
         return this.getContent(new ClassPathResource("Big_Guy.flow")); //$NON-NLS-1$
+    }
+
+    private String getEmptyBPMNContent() {
+        Process process = Bpmn2Factory.eINSTANCE.createProcess();
+        LaneSet laneSet = Bpmn2Factory.eINSTANCE.createLaneSet();
+        laneSet.setName("Lane set"); //$NON-NLS-1$
+        process.getLaneSets().add(laneSet);
+        Lane lane = Bpmn2Factory.eINSTANCE.createLane();
+        lane.setName("Lane"); //$NON-NLS-1$
+        laneSet.getLanes().add(lane);
+        return this.getEmptyContent(process);
+    }
+
+    private String getNobelBPMNContent() {
+        return this.getContent(new ClassPathResource("definitions.bpmn")); //$NON-NLS-1$
     }
 
     private String getEmptyContent(EObject rootEObject) {
@@ -110,31 +132,32 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
     }
 
     private String getContent(ClassPathResource classPathResource) {
-        IStopWatch stopWatch = this.stopWatchFactory.createStopWatch("Loading stereotype " + classPathResource); //$NON-NLS-1$
+        long start = System.currentTimeMillis();
+
         String content = ""; //$NON-NLS-1$
         try (var inputStream = classPathResource.getInputStream()) {
             URI uri = URI.createURI(classPathResource.getFilename());
-            Resource inputResource = this.loadFromXMI(uri, inputStream, stopWatch);
-            content = this.saveAsJSON(uri, inputResource, stopWatch);
+            Resource inputResource = this.loadFromXMI(uri, inputStream);
+            content = this.saveAsJSON(uri, inputResource);
         } catch (IOException exception) {
             this.logger.error(exception.getMessage(), exception);
         }
-        this.logger.debug(stopWatch.prettyPrint());
+
+        long end = System.currentTimeMillis();
+        this.timer.record(end - start, TimeUnit.MILLISECONDS);
+
         return content;
     }
 
-    private Resource loadFromXMI(URI uri, InputStream inputStream, IStopWatch stopWatch) throws IOException {
-        stopWatch.start("Loading XMI resource"); //$NON-NLS-1$
+    private Resource loadFromXMI(URI uri, InputStream inputStream) throws IOException {
         Resource inputResource = new XMIResourceImpl(uri);
         Map<String, Object> xmiLoadOptions = new EMFResourceUtils().getFastXMILoadOptions(parserPool);
         inputResource.load(inputStream, xmiLoadOptions);
-        stopWatch.stop();
         return inputResource;
     }
 
-    private String saveAsJSON(URI uri, Resource inputResource, IStopWatch stopWatch) throws IOException {
+    private String saveAsJSON(URI uri, Resource inputResource) throws IOException {
         String content;
-        stopWatch.start("Saving model as JSON"); //$NON-NLS-1$
         JsonResource ouputResource = new SiriusWebJSONResourceFactoryImpl().createResource(uri);
         ouputResource.getContents().addAll(inputResource.getContents());
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -142,10 +165,7 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
             jsonSaveOptions.put(JsonResource.OPTION_ENCODING, JsonResource.ENCODING_UTF_8);
             jsonSaveOptions.put(JsonResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
             ouputResource.save(outputStream, jsonSaveOptions);
-            stopWatch.stop();
-            stopWatch.start("Getting back the raw JSON string"); //$NON-NLS-1$
             content = outputStream.toString(StandardCharsets.UTF_8);
-            stopWatch.stop();
         }
         return content;
     }
