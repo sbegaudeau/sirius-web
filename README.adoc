@@ -15,7 +15,7 @@ To build and run the example application you will need the following tools:
 * Recent versions of Node and NPM: in particular, Node >= 14.
 * https://rollupjs.org/[Rollup] for bundling `sirius-components` (`npm install -g rollup`)
 * Yalc (`npm install -g yalc`): optional, only needed for local publication of the frontend components
-* Docker
+* Docker, or an existing PostgreSQL installation.
 
 Note that there are issues with npm under Windows Subsystem for Linux (WSL). If you use WSL and encounter error messages like _"Maximum call stack size exceeded"_ when running NPM, switch to plain Windows where this should work.
 
@@ -97,6 +97,8 @@ cd sirius-web
 ----
 +
 _Warning:_ this may take a while the first time you run this as Docker will first pull the PostgreSQL image.
++
+If you do not have Docker or want to use an existing installation, adjust the parameters below and make sure the DB user has admin rights on the database; they are needed to automatically create the DB schema.
 2. Start the application:
 +
 ----
