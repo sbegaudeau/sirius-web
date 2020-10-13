@@ -9,13 +9,15 @@ This repository, `sirius-web`, contains an example application of the Sirius Web
 
 To build and run the example application you will need the following tools:
 
-* git
-* Java 11 (or later)
+* Git
+* Java 11 (Java 12 and later are currently not supported)
 * Apache Maven 3.6.3
-* Recent versions of Node and NPM (tested with Node v14.10 and npm 6.14.8)
-* rollup (`npm install -g rollup`)
-* yalc (`npm install -g yalc`): optional, only needed for local publication of the frontend components
+* Recent versions of Node and NPM: in particular, Node >= 14.
+* https://rollupjs.org/[Rollup] for bundling `sirius-components` (`npm install -g rollup`)
+* Yalc (`npm install -g yalc`): optional, only needed for local publication of the frontend components
 * Docker
+
+Note that there are issues with npm under Windows Subsystem for Linux (WSL). If you use WSL and encounter error messages like _"Maximum call stack size exceeded"_ when running NPM, switch to plain Windows where this should work.
 
 === Building and publishing locally the frontend and backend components
 
