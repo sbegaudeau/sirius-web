@@ -27,7 +27,7 @@ public class SampleSiriusConfiguration implements ISiriusConfiguration {
 
     @Override
     public List<String> getODesignPaths() {
-        return List.of("description/flow.odesign", "description/BPMN2.odesign"); //$NON-NLS-1$ //$NON-NLS-2$
+        return List.of("description/flow.odesign"); //$NON-NLS-1$
     }
 
 }

@@ -34,7 +34,6 @@ import org.eclipse.sirius.web.emf.services.SiriusWebJSONResourceFactoryImpl;
 import org.eclipse.sirius.web.emf.utils.EMFResourceUtils;
 import org.eclipse.sirius.web.services.api.monitoring.IStopWatch;
 import org.eclipse.sirius.web.services.api.monitoring.IStopWatchFactory;
-import org.obeonetwork.dsl.bpmn2.Bpmn2Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -62,14 +61,6 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
 
     public static final String BIG_GUY_FLOW_LABEL = "Big Guy Flow (17k elements)"; //$NON-NLS-1$
 
-    public static final String EMPTY_BPMN_ID = "empty_bpmn"; //$NON-NLS-1$
-
-    public static final String EMPTY_BPMN_LABEL = "Empty BPMN model"; //$NON-NLS-1$
-
-    public static final String NOBEL_BPMN_ID = "nobel_bpmn"; //$NON-NLS-1$
-
-    public static final String NOBEL_BPMN_LABEL = "Nobel BPMN model"; //$NON-NLS-1$
-
     private static XMLParserPool parserPool = new XMLParserPoolImpl();
 
     private final Logger logger = LoggerFactory.getLogger(StereotypeDescriptionRegistryConfigurer.class);
@@ -85,8 +76,6 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
         registry.add(new StereotypeDescription(EMPTY_FLOW_ID, EMPTY_FLOW_LABEL, this::getEmptyFlowContent));
         registry.add(new StereotypeDescription(ROBOT_FLOW_ID, ROBOT_FLOW_LABEL, this::getRobotFlowContent));
         registry.add(new StereotypeDescription(BIG_GUY_FLOW_ID, BIG_GUY_FLOW_LABEL, this::getBigGuyFlowContent));
-        registry.add(new StereotypeDescription(EMPTY_BPMN_ID, EMPTY_BPMN_LABEL, this::getEmptyBPMNContent));
-        registry.add(new StereotypeDescription(NOBEL_BPMN_ID, NOBEL_BPMN_LABEL, this::getNobelBPMNContent));
     }
 
     private String getEmptyFlowContent() {
@@ -99,14 +88,6 @@ public class StereotypeDescriptionRegistryConfigurer implements IStereotypeDescr
 
     private String getBigGuyFlowContent() {
         return this.getContent(new ClassPathResource("Big_Guy.flow")); //$NON-NLS-1$
-    }
-
-    private String getEmptyBPMNContent() {
-        return this.getEmptyContent(Bpmn2Factory.eINSTANCE.createDefinitions());
-    }
-
-    private String getNobelBPMNContent() {
-        return this.getContent(new ClassPathResource("definitions.bpmn")); //$NON-NLS-1$
     }
 
     private String getEmptyContent(EObject rootEObject) {

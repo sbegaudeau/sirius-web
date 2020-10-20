@@ -45,10 +45,6 @@
 			<id>github-flow</id>
 			<url>https://maven.pkg.github.com/ObeoNetwork/Flow-Designer</url>
 		</repository>
-		<repository>
-			<id>github-bpmn</id>
-			<url>https://maven.pkg.github.com/ObeoNetwork/BPMN-Designer</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
