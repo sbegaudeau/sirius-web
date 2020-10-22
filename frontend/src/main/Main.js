@@ -18,7 +18,7 @@ import {
   withErrorBoundary,
   withCapabilities,
   withProject
-} from '@obeo/sirius-components';
+} from '@eclipse-sirius/sirius-components';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 

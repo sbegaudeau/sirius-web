@@ -10,7 +10,7 @@
  * Contributors:
  *     Obeo - initial API and implementation
  *******************************************************************************/
-import { GraphQLClient, graphQLHttpClient, graphQLWebSocketClient } from '@obeo/sirius-components';
+import { GraphQLClient, graphQLHttpClient, graphQLWebSocketClient } from '@eclipse-sirius/sirius-components';
 import { Main } from 'main/Main';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
