@@ -19,8 +19,17 @@ jobs:
         with:
           java-version: 11
 
-      - name: Maven
+      - name: Build with Maven
         env:
           USERNAME: ${{github.actor}}
           PASSWORD: ${{secrets.GITHUB_TOKEN}}
-        run: mvn -U -B clean verify -f backend/pom.xml --settings settings.xml
+        run: |
+          mvn -U -B clean verify -f backend/pom.xml --settings settings.xml
+          mkdir staging
+          cp backend/sirius-web-sample-application/target/sirius-web-sample-application-*-SNAPSHOT.jar staging/sirius-web-sample-application.jar
+
+      - name: Publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: staging
