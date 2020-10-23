@@ -41,10 +41,9 @@
 			<id>github-sirius-components</id>
 			<url>https://maven.pkg.github.com/eclipse-sirius/sirius-components</url>
 		</repository>
-		<!-- See https://github.com/Obeo/sirius-web-contrib/issues/1 to obtain an already built version of Flow Designer -->
 		<repository>
 			<id>github-flow</id>
-			<url>file:///TODO_SET_YOUR_LOCAL_PATH_TO_FLOW_DESIGNER</url>
+			<url>https://maven.pkg.github.com/ObeoNetwork/Flow-Designer</url>
 		</repository>
 	</repositories>
 
