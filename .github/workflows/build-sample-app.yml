@@ -1,4 +1,4 @@
-name: Maven Publish
+name: Build and Publish Sample Application
 
 on:
   push:
@@ -47,8 +47,8 @@ jobs:
           mkdir staging
           cp backend/sirius-web-sample-application/target/sirius-web-sample-application-*-SNAPSHOT.jar staging/sirius-web-sample-application.jar
 
-      - name: Publish
+      - name: Publish sample application
         uses: actions/upload-artifact@v2
         with:
-          name: Package
+          name: SiriusWebSample
           path: staging
