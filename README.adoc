@@ -84,7 +84,7 @@ WARNING: Once generated, a token cannot be displayed anymore, so make sure to co
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
   <servers>
     <server>
-      <id>github-emfjson</id>
+      <id>github-sirius-emfjson</id>
       <username>$GITHUB_USERNAME</username>
       <password>$GITHUB_ACCESS_TOKEN</password>
     </server>

@@ -18,7 +18,7 @@
           <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
-          <id>github-emfjson</id>
+          <id>github-sirius-emfjson</id>
           <name>GitHub EMFJson Apache Maven Packages</name>
           <url>https://maven.pkg.github.com/eclipse-sirius/emf-json</url>
         </repository>
@@ -43,7 +43,7 @@
 
   <servers>
     <server>
-      <id>github-emfjson</id>
+      <id>github-sirius-emfjson</id>
       <username>${env.USERNAME}</username>
       <password>${env.PASSWORD}</password>
     </server>
