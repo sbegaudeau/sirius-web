@@ -104,6 +104,12 @@ WARNING: Once generated, a token cannot be displayed anymore, so make sure to co
 Be sure to replace `$GITHUB_USERNAME` with your GitHub user id, and `$GITHUB_ACCESS_TOKEN` with the value of your acess token.
 +
 IMPORTANT: The `id` used in your `settings.xml` *must* be the ones mentioned above to match what is used in the POMs.
+. Create or edit `$HOME/.npmrc` and add the following line:
++
+---
+//npm.pkg.github.com/:_authToken=$GITHUB_ACCESS_TOKEN
+---
++Again, be sure to replace `$GITHUB_ACCESS_TOKEN` with the value of your acess token.
 
 === Build steps
 
