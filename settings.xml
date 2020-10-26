@@ -28,11 +28,6 @@
           <url>https://maven.pkg.github.com/eclipse-sirius/sirius-components</url>
         </repository>
         <repository>
-          <id>github-bpmn</id>
-          <name>Github Obeo Network BPMN Designer Apache Maven Packages</name>
-          <url>https://maven.pkg.github.com/ObeoNetwork/BPMN-Designer</url>
-        </repository>
-        <repository>
           <id>github-flow</id>
           <name>Github Obeo Network Flow Designer Apache Maven Packages</name>
           <url>https://maven.pkg.github.com/ObeoNetwork/Flow-Designer</url>
@@ -49,11 +44,6 @@
     </server>
     <server>
       <id>github-sirius-components</id>
-      <username>${env.USERNAME}</username>
-      <password>${env.PASSWORD}</password>
-    </server>
-    <server>
-      <id>github-bpmn</id>
       <username>${env.USERNAME}</username>
       <password>${env.PASSWORD}</password>
     </server>

@@ -106,21 +106,6 @@
 			<artifactId>fr.obeo.dsl.designer.sample.flow.design</artifactId>
 			<version>${flow.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>BPMN2</groupId>
-			<artifactId>org.obeonetwork.dsl.bpmn2</artifactId>
-			<version>4.0.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>BPMN2</groupId>
-			<artifactId>org.obeonetwork.dsl.bpmn2.edit</artifactId>
-			<version>4.0.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>BPMN2</groupId>
-			<artifactId>org.obeonetwork.dsl.bpmn2.design</artifactId>
-			<version>4.0.3-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
