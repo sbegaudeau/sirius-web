@@ -7,6 +7,12 @@ image::ProjectEditor.png[Sirius Web]
 
 This repository, `sirius-web`, contains an example application of the Sirius Web platform, built using the frontend and backend components in https://github.com/eclipse-sirius/sirius-components[`sirius-components`].
 
+To test _Sirius Web_ you have two possible options:
+
+. If you just want to run an already built version of the example application, follow link:#quick-start[the Quick Start].
+. If you want to _build_ the example application yourself, follow link:#build[the complete Build instructions].
+
+[#quick-start]
 == Quick Start
 
 If you want a quick overview of how Sirius Web looks and feels like without building the sample application yourself, you will simply need:
@@ -30,7 +36,11 @@ To actually run the application:
 +
 [source,sh]
 ----
-docker run -p 5433:5432 --rm --name sirius-web-postgres -e POSTGRES_USER=dbuser -e POSTGRES_PASSWORD=dbpwd -e POSTGRES_DB=sirius-web-db -d postgres
+docker run -p 5433:5432 --rm --name sirius-web-postgres \
+                             -e POSTGRES_USER=dbuser \
+                             -e POSTGRES_PASSWORD=dbpwd \
+                             -e POSTGRES_DB=sirius-web-db \
+                             -d postgres
 ----
 +
 WARNING: This may take a while the first time you run this as Docker will first pull the PostgreSQL image.
@@ -38,8 +48,12 @@ WARNING: This may take a while the first time you run this as Docker will first 
 If you do not have Docker or want to use an existing PostgreSQL installation, adjust the command-line parameters below and make sure the DB user has admin rights on the database; they are needed to automatically create the DB schema.
 2. Start the application:
 +
+[source,sh]
 ----
-java -jar sirius-web-sample-application.jar --spring.datasource.url=jdbc:postgresql://localhost:5433/sirius-web-db --spring.datasource.username=dbuser --spring.datasource.password=dbpwd
+java -jar sirius-web-sample-application.jar \
+          --spring.datasource.url=jdbc:postgresql://localhost:5433/sirius-web-db \
+          --spring.datasource.username=dbuser \
+          --spring.datasource.password=dbpwd
 ----
 3. Point your browser at http://localhost:8080 and enjoy!
 +
@@ -49,8 +63,10 @@ It is recommended to use a Chrome-based browser until these are fixed.
 NOTE: Do not forget to stop the PostgreSQL container once you are done: `docker kill sirius-web-postgres`. 
 Note that this will remove all the data you have created while testing the application.
 
+[#build]
 == Building
 
+[#build-requirements]
 === Requirements
 
 To build the example application yourself you will need the following tools:
@@ -66,6 +82,7 @@ To build the example application yourself you will need the following tools:
 
 WARNING: Note that there are issues with npm under Windows Subsystem for Linux (WSL). If you use WSL and encounter error messages like _"Maximum call stack size exceeded"_ when running NPM, switch to plain Windows where this should work.
 
+[#github-token]
 === GitHub Access Token
 
 The backend part of _Sirius Components_ depends on https://github.com/eclipse-sirius/sirius-emf-json[`sirius-emf-json`], which is published as Maven artifacts in _GitHub Packages_.
@@ -112,8 +129,8 @@ IMPORTANT: The `id` used in your `settings.xml` *must* be the ones mentioned abo
 ----
 +Again, be sure to replace `$GITHUB_ACCESS_TOKEN` with the value of your acess token.
 
+[#build-steps]
 === Build steps
-
 
 Build steps:
 
