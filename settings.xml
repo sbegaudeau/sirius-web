@@ -32,6 +32,11 @@
           <name>Github Obeo Network Flow Designer Apache Maven Packages</name>
           <url>https://maven.pkg.github.com/ObeoNetwork/Flow-Designer</url>
         </repository>
+        <repository>
+          <id>github-bpmn</id>
+          <name>Github Obeo Network BPMN Designer Apache Maven Packages</name>
+          <url>https://maven.pkg.github.com/ObeoNetwork/BPMN-Designer</url>
+        </repository>
       </repositories>
     </profile>
   </profiles>
