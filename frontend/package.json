@@ -13,7 +13,10 @@
   "private": true,
   "dependencies": {
     "@eclipse-sirius/sirius-components": "0.1.27",
+    "@apollo/client": "^3.2.7",
+    "subscriptions-transport-ws": "^0.9.18",
     "airbnb-prop-types": "^2.15.0",
+    "graphql-tag": "^2.11.0",
     "graphql": "14.6.0",
     "graphql.macro": "^1.4.2",
     "prop-types": "^15.7.2",
